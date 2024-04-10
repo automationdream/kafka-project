@@ -1,25 +1,30 @@
 from confluent_kafka import Producer, Consumer
+from dotenv import load_dotenv
+import os
 
+# Load environment variables
+load_dotenv()
 
-def read_config():
-  # reads the client configuration from client.properties
-  # and returns it as a key-value map
-  config = {}
-  with open("client.properties") as fh:
-    for line in fh:
-      line = line.strip()
-      if len(line) != 0 and line[0] != "#":
-        parameter, value = line.strip().split('=', 1)
-        config[parameter] = value.strip()
-  return config
+# Create Kafka config
+config = {
+  "bootstrap.servers": os.getenv("BOOTSTRAP_SERVERS"),
+  "security.protocol": os.getenv("SECURITY_PROTOCOL"),
+  "sasl.mechanisms": os.getenv("SASL_MECHANISMS"),
+  "sasl.username": os.getenv("SASL_USERNAME"),
+  "sasl.password": os.getenv("SASL_PASSWORD")
+}
+
+# Get topic from environment variable
+topic = os.getenv("KAFKA_TOPIC")
+
 
 def produce(topic, config):
   # creates a new producer instance
   producer = Producer(config)
 
   # produces a sample message
-  key = "key"
-  value = "value"
+  key = os.getenv("MESSAGE_KEY")
+  value = os.getenv("MESSAGE_VALUE")
   producer.produce(topic, key=key, value=value)
   print(f"Produced message to topic {topic}: key = {key:12} value = {value:12}")
 
@@ -52,9 +57,6 @@ def consume(topic, config):
     consumer.close()
 
 def main():
-  config = read_config()
-  topic = ""
-
   produce(topic, config)
   consume(topic, config)
 
