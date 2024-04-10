@@ -11,7 +11,8 @@ config = {
   "security.protocol": os.getenv("SECURITY_PROTOCOL"),
   "sasl.mechanisms": os.getenv("SASL_MECHANISMS"),
   "sasl.username": os.getenv("SASL_USERNAME"),
-  "sasl.password": os.getenv("SASL_PASSWORD")
+  "sasl.password": os.getenv("SASL_PASSWORD"),
+  "session.timeout.ms": os.getenv("SESSION_TIMEOUT_MS"),
 }
 
 # Get topic from environment variable
