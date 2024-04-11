@@ -1,6 +1,7 @@
 from confluent_kafka import Producer
 from dotenv import load_dotenv
 import os
+import argparse
 
 # Load environment variables
 load_dotenv()
@@ -18,13 +19,12 @@ config = {
 # Get topic from environment variable
 topic = os.getenv("KAFKA_TOPIC")
 
-def produce(topic, config):
+def produce(topic, config, value):
   # creates a new producer instance
   producer = Producer(config)
 
   # produces a sample message
   key = os.getenv("MESSAGE_KEY")
-  value = os.getenv("MESSAGE_VALUE")
   producer.produce(topic, key=key, value=value)
   print(f"Produced message to topic {topic}: key = {key:12} value = {value:12}")
 
@@ -32,4 +32,8 @@ def produce(topic, config):
   producer.flush()
 
 if __name__ == "__main__":
-  produce(topic, config)
+  parser = argparse.ArgumentParser(description='Produce a message to a Kafka topic.')
+  parser.add_argument('--message', type=str, required=True, help='The value of the message.')
+
+  args = parser.parse_args()
+  produce(topic, config, value=args.message)
