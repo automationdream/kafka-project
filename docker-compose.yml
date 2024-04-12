@@ -1,0 +1,19 @@
+version: '3'
+services:
+  kafka-producer:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    entrypoint: ["python", "producer.py", "--message", "Hello, World!"]
+    env_file:
+      - .env
+
+  kafka-consumer:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - kafka-producer
+    command: ["python", "consumer.py"]
+    env_file:
+      - .env
