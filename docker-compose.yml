@@ -7,6 +7,8 @@ services:
     entrypoint: ["python", "producer.py", "--message", "Hello, World!"]
     env_file:
       - .env
+    volumes:
+      - ./data:/data
 
   kafka-consumer:
     build: 
@@ -17,3 +19,5 @@ services:
     command: ["python", "consumer.py"]
     env_file:
       - .env
+    volumes:
+      - ./data:/data
